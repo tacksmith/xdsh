@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "default_model": "ark-code-latest",
+  "providers": [
+    {
+      "id": "volc-coding",
+      "label": "Volcengine ARK",
+      "icon": "🔥"
+    },
+    {
+      "id": "local-llama",
+      "label": "Local llama.cpp",
+      "icon": "🖥️"
+    }
+  ],
+  "models": [
+    {
+      "id": "ark-code-latest",
+      "provider": "volc-coding",
+      "reasoning": true,
+      "tools": true
+    },
+    {
+      "id": "qwen-3.8-27b-draft-mtp",
+      "provider": "local-llama",
+      "reasoning": true,
+      "tools": true
+    }
+  ]
+}

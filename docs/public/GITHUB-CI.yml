@@ -1,0 +1,74 @@
+name: XDSH public CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xdsh-public-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    env:
+      UV_NO_PROGRESS: "1"
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Check out XDSH
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.5"
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Sync the locked environment
+        run: uv sync --locked --all-groups --all-extras
+
+      - name: Run public core contracts
+        run: .venv/bin/python -m pytest -q tests/unit
+
+      - name: Run static checks
+        run: |
+          .venv/bin/ruff check src tests
+          # Dependency stubs can require the job's Python syntax (e.g. NumPy).
+          # The 3.10 job still enforces the minimum supported source version.
+          .venv/bin/mypy --python-version "${{ matrix.python-version }}" src tests
+          .venv/bin/python -m compileall -q src tests
+
+      - name: Check aligned RC2 identity
+        run: >-
+          .venv/bin/python -c
+          "from xdsh import DSH_COMPATIBLE_VERSION, XDSH_VERSION_DISPLAY;
+          assert XDSH_VERSION_DISPLAY == DSH_COMPATIBLE_VERSION"
+
+      - name: Run credential-free 429 protection probe
+        run: .venv/bin/python -m xdsh.ops.rate_limit_probe
+
+      - name: Regenerate and verify a clean source bundle
+        run: |
+          .venv/bin/python -m xdsh.ops.release export \
+            --source . \
+            --destination "$RUNNER_TEMP/xdsh-public"
+          .venv/bin/python -m xdsh.ops.release verify \
+            "$RUNNER_TEMP/xdsh-public" \
+            --strict
+
+      - name: Build the public archives
+        working-directory: ${{ runner.temp }}/xdsh-public
+        run: uv build --out-dir "$RUNNER_TEMP/xdsh-public-dist"

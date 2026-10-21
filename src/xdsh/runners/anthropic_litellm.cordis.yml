@@ -1,0 +1,211 @@
+# Official DSH plugins only. stdout remains reserved for SDK JSON-RPC.
+- id: sdk-jsonrpc-server
+  name: '@deepseek-ai/dsh-sdk-jsonrpc-server'
+  config:
+    maxTokensAsSuccess: false
+
+- id: llm
+  name: '@deepseek-ai/dsh-llm-pi-ai'
+  config:
+    providers:
+      litellm: &litellm-provider
+        displayName: LiteLLM
+        apiKeyEnv: XDSH_LITELLM_API_KEY
+        api: anthropic-messages
+        baseURL: !!js process.env.XDSH_LITELLM_BASE_URL
+        streamIdleTimeoutMs: !!js Number(process.env.XDSH_LLM_STREAM_IDLE_TIMEOUT_MS ?? '120000')
+        # The official dsh-llm-retry plugin is part of the agent spine. Keep
+        # provider retries bounded and let XDSH's outer gate stop a storm
+        # without replaying a side-effecting task.
+        retryPolicy:
+          mode: normal
+          maxRetries: !!js Number(process.env.XDSH_RATE_LIMIT_MAX_RETRIES ?? '5')
+          # RC2 retries inside the model step, before committing its assistant
+          # message or executing its tools. Verified against the installed
+          # agent-loop: completed earlier tools remain in history exactly once.
+          # This is NOT a task replay. Authentication/parameter/cancel failures
+          # stay terminal; the host separately bounds transient retry attempts.
+          retryableCodes: [RATE_LIMIT, TIMEOUT, TRANSPORT, SERVER, EMPTY_RESPONSE]
+          backoff:
+            initialDelayMs: !!js "Number(process.env.XDSH_RATE_LIMIT_BASE_BACKOFF_SECONDS ?? '5') * 1000"
+            maxDelayMs: !!js "Number(process.env.XDSH_RATE_LIMIT_MAX_BACKOFF_SECONDS ?? '120') * 1000"
+            jitterRatio: !!js "Number(process.env.XDSH_RATE_LIMIT_JITTER_RATIO ?? '0.1')"
+        reasoning: !!js process.env.XDSH_REASONING_EFFORT
+        thinkingBudgets:
+          minimal: 1024
+          low: 2048
+          medium: 8192
+          high: 16384
+        models:
+          - id: !!js process.env.XDSH_LITELLM_MODEL
+            contextWindow: !!js Number(process.env.XDSH_CONTEXT_WINDOW)
+            maxTokens: !!js Number(process.env.XDSH_MODEL_MAX_TOKENS)
+            reasoningEfforts:
+              off:
+              minimal: minimal
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+              max: max
+
+      # Compatibility alias for existing explicit SDK/provider configurations.
+      litellm-anthropic: *litellm-provider
+
+# Keep command writes inside the session workspace on supported hosts.
+- id: sandbox
+  name: '@deepseek-ai/dsh-sandbox-local'
+
+- id: sandbox-policy
+  name: '@deepseek-ai/dsh-sandbox-policy'
+  config:
+    mode: workspace-write
+    workspaceRoot: !!js process.env.DSH_CWD ?? process.cwd()
+
+- id: subprocess
+  name: '@deepseek-ai/dsh-subprocess-local'
+
+# Use the official typed executor. rc.2 renders process status into model-facing
+# content but does not persist its raw typed value on the SDK JSON-RPC event;
+# XDSH therefore bounds repeats from structured call fingerprints, never by
+# parsing stdout markers.
+- id: bash-sandbox
+  name: '@deepseek-ai/dsh-bash-sandbox'
+  config:
+    timeoutMs: 300000
+
+- id: pty
+  name: '@deepseek-ai/dsh-terminal'
+
+- id: terminal-bash
+  name: '@deepseek-ai/dsh-terminal-bash'
+  config:
+    timeoutMs: 300000
+
+- id: fs-sandbox
+  name: '@deepseek-ai/dsh-fs-sandbox'
+
+- id: fs-observation-policy
+  name: '@deepseek-ai/dsh-fs-observation-policy'
+
+- id: tool-fs
+  name: '@deepseek-ai/dsh-tool-fs'
+
+- id: agent-spine
+  name: '@deepseek-ai/dsh-agent-spine-demo'
+  config:
+    dshHome: !!js process.env.DSH_HOME
+    includeHarnessIdentity: false
+    includeRuntimeContext: false
+    persona: !!js process.env.DSH_SYSTEM_PROMPT ?? 'You are a software engineering agent.'
+    workspaceContext:
+      maxBytes: 65536
+    skills:
+      enabled: true
+    toolBash: {}
+    toolJobs: {}
+    # Four matches the official web-search batch ceiling while keeping
+    # provider fan-out below the RC2 default of ten.
+    maxParallelToolCalls: !!js Number(process.env.XDSH_MAX_PARALLEL_TOOL_CALLS ?? '4')
+
+- id: tool-fs-search
+  name: '@deepseek-ai/dsh-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# First-party in-loop reminders complement the authoritative outer guard. The
+# model is warned before XDSH hard-stops the eighth identical structured call.
+- id: repeat-tool-reminder
+  name: '@deepseek-ai/dsh-repeat-tool-reminder'
+  config:
+    thresholds: [3, 5, 8]
+    argumentsPreviewChars: 500
+
+# The official client connects only to XDSH's loopback, authenticated gateway.
+# That gateway advertises an already-filtered tool catalog; arbitrary MCP
+# servers are never mounted directly into the DSH agent.
+- id: xdsh-restricted-mcp
+  name: '@deepseek-ai/dsh-mcp-client'
+  disabled: !!js process.env.XDSH_INTERNAL_MCP_ENABLED !== '1'
+  config:
+    serverName: xdsh
+    transport: streamable-http
+    url: !!js '`http://127.0.0.1:${process.env.XDSH_INTERNAL_MCP_PORT ?? "8765"}/mcp`'
+    headers:
+      Authorization: !!js '`Bearer ${process.env[process.env.XDSH_INTERNAL_MCP_CREDENTIAL_ENV ?? ""] ?? ""}`'
+    toolCallTimeoutMs: 60000
+    failOnStartupError: true
+    reconnect:
+      enabled: true
+      initialDelayMs: 250
+      maxDelayMs: 5000
+      maxAttempts: 3
+
+# In-process delegation stays foreground-only and depth-one. This makes child
+# lifecycle visible on the SDK wire and prevents unattended child jobs from
+# outliving the parent turn.
+- id: subagent
+  name: '@deepseek-ai/dsh-subagent'
+
+- id: subagent-spawn
+  name: '@deepseek-ai/dsh-subagent-spawn-in-process'
+  config:
+    providerName: spawn
+
+- id: tool-subagent
+  name: '@deepseek-ai/dsh-tool-subagent'
+  config:
+    provider: spawn
+    toolName: subagent
+    enableRunInBackground: false
+    backgroundMode: one-shot
+    maxDepth: 1
+    toolFilter:
+      deny: [subagent]
+
+- id: str-replace-editor
+  name: '@deepseek-ai/dsh-tool-str-replace-editor'
+  config:
+    maxOutputChars: 16000
+
+- id: tool-todo
+  name: '@deepseek-ai/dsh-tool-todo'
+  config:
+    allowParallelInProgress: true
+
+- id: sessions
+  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  config:
+    root: !!js process.env.DSH_SESSION_ROOT
+    compression: none
+
+- id: session-checkpoints
+  name: '@deepseek-ai/dsh-session-checkpoint-policy'
+
+- id: token-meter
+  name: '@deepseek-ai/dsh-token-meter'
+
+# Model-free pruning runs before the broader summarizer and keeps oversized
+# tool results bounded.  The complete original remains in DSH's append-only
+# log; only the model-visible surface is replaced.
+- id: tool-result-pruner
+  name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+  config:
+    thresholdChars: 8192
+    headChars: 4096
+    tailChars: 1024
+
+# Official DSH rc.2 context protection.  This is the native compaction
+# backend, not a custom XDSH plugin: it checks token pressure at safe agent
+# step boundaries, recovers confirmed provider overflow, and emits structured
+# compaction/* session events.  XDSH passes normalized 0/1 flags so disabling
+# automatic compaction never silently leaves the native listener active.
+- id: compaction-basic
+  name: '@deepseek-ai/dsh-compaction-basic'
+  config:
+    thresholdRatio: !!js "Number(process.env.XDSH_AUTO_COMPACT_THRESHOLD_RATIO ?? '0.50')"
+    retainRatio: !!js "Number(process.env.XDSH_AUTO_COMPACT_RETAIN_RATIO ?? '0.08')"
+    maxTokens: 8192
+    compactionRetries: 1
+    maxOverflowRetries: 1
+    auto: !!js "process.env.XDSH_AUTO_COMPACT_ENABLED === '1' && process.env.XDSH_NATIVE_COMPACTION_ENABLED === '1'"

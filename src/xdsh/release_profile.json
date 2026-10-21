@@ -1,0 +1,12 @@
+{
+  "dsh_runtime_version": "0.1.1-rc.2",
+  "release": "xdsh-0.1.1-rc.2",
+  "release_channel": "stable",
+  "schema_version": 1,
+  "supported_dsh_runtime_versions": [
+    "0.1.1-rc.2"
+  ],
+  "version_alignment": "XDSH and DSH use the same 0.1.1-rc.2 release line",
+  "xdsh_version": "0.1.1rc2",
+  "xdsh_version_display": "0.1.1-rc.2"
+}

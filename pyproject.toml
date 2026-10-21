@@ -1,0 +1,147 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xdsh"
+version = "0.1.1rc2"
+description = "XDSH (eXternal DeepSeek Harness): control plane for DeepSeek Harness"
+readme = "docs/public/README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+keywords = ["agent", "deepseek", "harness", "telegram", "automation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+requires-python = ">=3.10"
+dependencies = [
+    # The stable RC2 publication pins the official protocol client exactly.
+    "deepseek-harness-sdk==0.1.1rc1",
+    "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+gateway = [
+    # The pinned native Messages streaming iterator imports proxy auth/types.
+    # Keep the official dependency closure instead of discovering it at first stream.
+    "litellm[proxy]==1.88.6",
+    # Audited security floors also protect pip installs into existing environments;
+    # uv.lock alone does not constrain consumers of a wheel.
+    "cryptography>=50.0.2,<51",
+    "mcp>=1.28.1,<2",
+    "PyJWT>=2.15,<3",
+    "python-multipart>=0.0.31,<1",
+    "RestrictedPython>=8.4,<9",
+    "starlette>=1.3.1,<2",
+    "oauthlib>=4,<5",
+    "urllib3>=2.8,<3",
+    "multidict>=6.9.1,<7",
+]
+channels = [
+    "cryptography>=50.0.2,<51",
+    "qqbot-agent-sdk==1.2.2",
+    "aiohttp>=3.14.2,<4",
+    "multidict>=6.9.1,<7",
+]
+qq = [
+    "qqbot-agent-sdk==1.2.2",
+    "aiohttp>=3.14.2,<4",
+    "multidict>=6.9.1,<7",
+]
+science = [
+    # Optional native reader; core/NPY checks remain dependency-free.
+    "h5py==3.16.0",
+]
+
+[project.scripts]
+xdsh-speech = "xdsh.ops.speech:main"
+xdsh-verify = "xdsh.ops.verify:main"
+xdsh-smoke = "xdsh.ops.smoke:main"
+xdsh-telegram = "xdsh.telegram.service:main"
+xdsh-telegram-health = "xdsh.ops.telegram_health:main"
+xdsh-benchmark-task = "xdsh.ops.benchmark:main"
+xdsh-skill-benchmark-task = "xdsh.ops.skill_benchmark:main"
+xdsh-skill-ab-case = "xdsh.ops.skill_ab_cases:main"
+xdsh-compaction-probe = "xdsh.ops.compaction_probe:main"
+xdsh = "xdsh.ops.cli:main"
+xdsh-cli = "xdsh.ops.cli:main"
+xdsh-reconcile = "xdsh.ops.reconciler:main"
+xdsh-jobs = "xdsh.ops.jobs:main"
+xdsh-setup = "xdsh.ops.bootstrap:main"
+xdsh-doctor = "xdsh.ops.doctor:main"
+xdsh-decision-shadow = "xdsh.ops.decision_shadow:main"
+xdsh-release = "xdsh.ops.release:main"
+xdsh-channels = "xdsh.ops.channels:main"
+xdsh-channel-serve = "xdsh.ops.channel_server:main"
+xdsh-qq = "xdsh.ops.qq:main"
+xdsh-config = "xdsh.ops.config_ui:main"
+xdsh-providers = "xdsh.ops.providers:main"
+xdsh-model-gateway = "xdsh.ops.model_gateway:main"
+
+[dependency-groups]
+dev = [
+    "mypy==1.17.1",
+    "pytest==9.0.3",
+    "pytest-asyncio==1.3.0",
+    "ruff==0.12.11",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xdsh"]
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "pyproject.toml",
+    "src/xdsh",
+    "docs/public",
+    "examples",
+    "scripts/wsl_install.sh",
+]
+
+[tool.hatch.build.targets.sdist.force-include]
+"docs/public/SECURITY.md" = "docs/SECURITY.md"
+"docs/public/CONTAINER.md" = "docs/CONTAINER.md"
+"LICENSE" = "LICENSE"
+"NOTICE" = "NOTICE"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: exercises a real DSH runtime",
+    "smoke: exercises the configured LiteLLM route",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Natural-language catalogs necessarily contain non-ASCII punctuation and
+# cross-script characters that RUF001 is designed to flag in identifiers.
+"src/xdsh/core/i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/settings_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/queue_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/approval_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/model_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/session_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/error_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/guard_i18n.py" = ["E501", "RUF001"]
+"src/xdsh/core/provider_ui_i18n.py" = ["E501", "RUF001"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src", "tests"]

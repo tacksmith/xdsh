@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "baseline": "xdsh-rc2",
+  "release_state": "aligned-public-baseline",
+  "release": "xdsh-0.1.1-rc.2",
+  "release_channel": "stable",
+  "publication_order": 2,
+  "xdsh_version": "0.1.1rc2",
+  "xdsh_version_display": "0.1.1-rc.2",
+  "dsh_runtime_version": "0.1.1-rc.2",
+  "supported_dsh_runtime_versions": [
+    "0.1.1-rc.2"
+  ],
+  "python_sdk_version": "0.1.1rc1",
+  "runtime_manifest": "src/xdsh/ops/dsh_runtime_package.json",
+  "runtime_entrypoint": "@deepseek-ai/dsh-sdk-jsonrpc-demo/lib/packaged-bin.js",
+  "provider_transport": "anthropic-messages-via-loopback-litellm",
+  "default_model": null,
+  "model_selection": "operator-configured exact gateway model ID; no bundled provider account",
+  "credentials": "environment-only",
+  "openai_compatible_direct": false,
+  "version_alignment": "XDSH and DSH use the same 0.1.1-rc.2 release line",
+  "candidate_policy": "additive-and-separate",
+  "artifact_policy": "reproducible-source-build; binaries are not the source of truth"
+}

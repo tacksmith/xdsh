@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "bundle": "xdsh-product-skills",
+  "version": "2026.09.27.2",
+  "skills": [
+    {
+      "name": "evidence-verification-unified",
+      "description": "Verify current facts about models, software releases, policies, people, organizations, and public web pages using authoritative sources, bounded retrieval, explicit uncertainty, and identity checks.",
+      "version": "1.1.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "66c9638c84625c0dc0213807ae48e38b9501c665bcfe463cbda2b1b21e56b3e9"
+      }
+    },
+    {
+      "name": "session-workspace-cleanup",
+      "description": "Safely clean explicitly requested session workspace temporary artifacts while preserving sessions, memory, skills, user files, audit evidence, and active work.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": false,
+      "files": {
+        "SKILL.md": "5e66a27297f4f38d08dce88cbc09e43b190adb60e6c36fc53f1b37db9ab820b1"
+      }
+    },
+    {
+      "name": "xdsh-approval-first-evolution",
+      "description": "Turn a discovered reusable workflow into a bounded, reviewable Skill proposal without ever mutating a bundled or user-owned Skill automatically.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "08003d0acd8224884e65e455528f56c504633b803206a7233ba79db7b7699ba5"
+      }
+    },
+    {
+      "name": "xdsh-artifact-quality",
+      "description": "Produce usable reports and files with a declared audience, structured claims, inspectable outputs, and a final quality check before delivery.",
+      "version": "1.3.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "31c7b79628560f49dbc40b92b723bea2bdfac1f6c8f754114d786a19f605a6ec"
+      }
+    },
+    {
+      "name": "xdsh-bounded-delegation",
+      "description": "Delegate genuinely independent work to isolated subagents with shared budgets, explicit receipts, parent verification, and coordinated cancellation.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "57870f4d05423bdbae043438ce1496435f9ef3de33d4051aa0b6619b0c4b006e"
+      }
+    },
+    {
+      "name": "xdsh-bounded-investigation",
+      "description": "Investigate repositories or workspace evidence with bounded tool use, parallel branches, explicit source tracking, and a concise evidence-backed conclusion.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "ad9f7bf89d20c5d11c064b33900fd605a3d5197b74baead8d138e4a424fa3afb"
+      }
+    },
+    {
+      "name": "xdsh-context-budget",
+      "description": "Keep long conversations within the configured model window using structured usage, safe-boundary compaction, and provenance-preserving continuation.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "8d7801c6410a47ba2e885eaa39b782a568b8cef7e93588ed404094f2c9157996"
+      }
+    },
+    {
+      "name": "xdsh-deep-research",
+      "description": "Research multi-source or disputed questions with bounded retrieval, claim-matched sources and explicit uncertainty. Simple facts need no broad investigation.",
+      "version": "1.5.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "622851b17f3f3db3c74c2387fd7b7c123bf39516a97af7a98e0c95d664db8027"
+      }
+    },
+    {
+      "name": "xdsh-direct-execution",
+      "description": "Choose the shortest safe path from the user's goal to a verified result, batching independent work and avoiding speculative detours.",
+      "version": "1.2.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "a185d5abfd2994f2bd69ee21eab804352d52057feeeb2e1ce40afa0f81a16740"
+      }
+    },
+    {
+      "name": "xdsh-evidence-reporting",
+      "description": "Produce concise reports that separate observed facts, inferences, decisions, and unresolved questions with traceable source references.",
+      "version": "1.3.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "0061cf633cf902a3b3c5a5f2a5952a740f42137c7d82539ba4e22c498fc1b94a"
+      }
+    },
+    {
+      "name": "xdsh-failure-recovery",
+      "description": "Recover from task failures with explicit transient, terminal, and unknown states, idempotency checks, bounded retries, and preserved partial work.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "857b2fc144107c2bf617337ba4f6edbcb00266683183b20a02b142d25e0a722d"
+      }
+    },
+    {
+      "name": "xdsh-long-task-control",
+      "description": "Run multi-step work with an explicit Todo, visible milestones, bounded retries, liveness checks, and a useful partial result when stopped.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "a8e1a56847e4eb35c488f516fd5a72f69ef071e28c9893fd686c7a18e600c832"
+      }
+    },
+    {
+      "name": "xdsh-memory-hygiene",
+      "description": "Keep durable USER, MEMORY, and session context useful through bounded redaction, provenance, deduplication, and explicit user authority.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "efe44f8698731a3844cbada8b178b8749bcebfeb9910032a4abaad47a2f46275"
+      }
+    },
+    {
+      "name": "xdsh-safe-external-access",
+      "description": "Use Web, MCP, browser, or media capabilities only through XDSH's authenticated allowlisted boundary with bounded resources and credential-safe output.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "c6da51d5b6cd046c4db2b159e5cd831951159bca00d11555f0621e78115bddad"
+      }
+    },
+    {
+      "name": "xdsh-skill-routing",
+      "description": "Select only relevant Skills through metadata-first progressive disclosure, explicit activation, trust boundaries, and bounded context injection.",
+      "version": "1.1.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "83fd1429832be4a9e5fe1d8c3f08457e99d337522f94ca4ed4098ab1ec14ebc6"
+      }
+    },
+    {
+      "name": "xdsh-testing-verification",
+      "description": "Validate an XDSH change with isolated tests, exact commands, and evidence proportional to its runtime and safety risk.",
+      "version": "1.0.0",
+      "provenance": "xdsh",
+      "default_enabled": true,
+      "files": {
+        "SKILL.md": "71d6daa90d1f9b8532467cd4526a737d5cd762233220683d802a26fb33e1823e"
+      }
+    }
+  ]
+}

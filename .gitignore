@@ -1,0 +1,22 @@
+.venv/
+.venv-science/
+.uv-cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+artifacts/
+dist/
+build/
+dsh-home/
+*.coverage
+htmlcov/
+*.env
+!*.env.example
+# Telegram user authorization keys must never enter a release or Git.
+*.session
+*.session-*
+
+# Internal launch/campaign materials (never public)
+docs/launch/
