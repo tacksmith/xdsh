@@ -100,6 +100,29 @@ Completions、Gemini、Azure 等 API。這不是 DSH 原生 OpenAI transport，�
 
 ## 安裝固定版本
 
+### 交給 AI agent 部署
+
+將下方提示詞貼給能存取本專案與目標主機的 agent：
+
+```text
+請在我授權的主機部署此 XDSH 原始碼版本。先讀 README、COMPATIBILITY、
+PROVIDERS、SECURITY（開發倉庫位於 docs/public），依環境讀 WSL 或 CONTAINER。
+簡要規劃後直接執行。固定 XDSH／DSH 0.1.1-rc.2，Python 套件0.1.1rc2，
+不要安裝 DSH latest。檢查 Python／Linux Node、既有服務與連接埠。
+只詢問缺少的主機、Provider、精確模型 ID、語言與數字使用者白名單。
+隔離安裝到 XDSH 專用目錄，保留其他服務；僅綁定 loopback。
+憑據使用本機遮罩輸入或環境引用，不列印、記錄、提交或借用其他產品憑據。
+先啟動模型閘道，再設定精確 DSH runtime 命令及獨立 Telegram Bot。
+執行 doctor、小型 CLI 任務、同會話續話、隔離檔案寫入讀回；
+請我發送 /start 和小任務完成 Telegram 驗收。替換服務前保留回滾。
+回報版本、路徑、命令、真實測試結果與阻塞。不要把範本生成稱為部署完成，
+不要捏造下載位址、暗換模型、關閉安全保護或擅自發布。
+```
+
+agent 仍需要你的授權及安全提供的憑據；這不是管理其他主機的許可。
+
+### 手動安裝
+
 先從 GitHub 下載並解壓本版本的原始碼歸檔，在專案目錄中開啟終端。
 以下指令安裝下載的本地版本，不依賴 PyPI 上已發布 XDSH。
 
@@ -382,27 +405,6 @@ RC2 固定配對是 XDSH／DSH `0.1.1-rc.2`，協議 SDK 為 `0.1.1rc1`；
 XDSH 不打包 DSH runtime、Provider 憑據或生產狀態。所有部署狀態預設位於
 `~/.xdsh`，服務只綁定 loopback。執行前請閱讀 [安全說明](SECURITY.md) 與
 [容器說明](CONTAINER.md)。
-
-## 交給 AI agent 部署
-
-將下方提示詞貼給能存取本專案與目標主機的 agent：
-
-```text
-請在我授權的主機部署此 XDSH 原始碼版本。先讀 README、COMPATIBILITY、
-PROVIDERS、SECURITY（開發倉庫位於 docs/public），依環境讀 WSL 或 CONTAINER。
-簡要規劃後直接執行。固定 XDSH／DSH 0.1.1-rc.2，Python 套件0.1.1rc2，
-不要安裝 DSH latest。檢查 Python／Linux Node、既有服務與連接埠。
-只詢問缺少的主機、Provider、精確模型 ID、語言與數字使用者白名單。
-隔離安裝到 XDSH 專用目錄，保留其他服務；僅綁定 loopback。
-憑據使用本機遮罩輸入或環境引用，不列印、記錄、提交或借用其他產品憑據。
-先啟動模型閘道，再設定精確 DSH runtime 命令及獨立 Telegram Bot。
-執行 doctor、小型 CLI 任務、同會話續話、隔離檔案寫入讀回；
-請我發送 /start 和小任務完成 Telegram 驗收。替換服務前保留回滾。
-回報版本、路徑、命令、真實測試結果與阻塞。不要把範本生成稱為部署完成，
-不要捏造下載位址、暗換模型、關閉安全保護或擅自發布。
-```
-
-agent 仍需要你的授權及安全提供的憑據；這不是管理其他主機的許可。
 
 ## 開發與驗證
 

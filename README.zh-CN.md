@@ -100,6 +100,29 @@ Completions、Gemini、Azure 等 API。这不是 DSH 原生 OpenAI transport，�
 
 ## 安装固定版本
 
+### 交给 AI agent 部署
+
+把下方提示词贴给能访问本项目和目标主机的 agent：
+
+```text
+请在我授权的主机部署此 XDSH 源码版本。先读 README、COMPATIBILITY、
+PROVIDERS、SECURITY（开发仓库位于 docs/public），按环境读 WSL 或 CONTAINER。
+简要规划后直接执行。固定 XDSH／DSH 0.1.1-rc.2，Python 包0.1.1rc2，
+不要安装 DSH latest。检查 Python／Linux Node、现有服务和端口。
+只询问缺少的主机、Provider、精确模型 ID、语言与数字用户白名单。
+隔离安装到 XDSH 专用目录，保留其他服务；仅绑定 loopback。
+凭据使用本地遮罩输入或环境引用，不打印、记录、提交或借用其他产品凭据。
+先启动模型网关，再配置精确 DSH runtime 命令及独立 Telegram Bot。
+执行 doctor、小型 CLI 任务、同会话续话、隔离文件写入读回；
+请我发送 /start 和小任务完成 Telegram 验收。替换服务前保留回滚。
+报告版本、路径、命令、真实测试结果和阻塞。不要把模板生成称为部署完成，
+不要捏造下载地址、暗换模型、关闭安全保护或擅自发布。
+```
+
+agent 仍需要你的授权及安全提供的凭据；这不是管理其他主机的许可。
+
+### 手动安装
+
 先从 GitHub 下载并解压本版本的源码归档，在项目目录中打开终端。
 以下命令安装下载的本地版本，不依赖 PyPI 上已发布 XDSH。
 
@@ -382,27 +405,6 @@ RC2 固定配对是 XDSH／DSH `0.1.1-rc.2`，协议 SDK 为 `0.1.1rc1`；
 XDSH 不打包 DSH runtime、Provider 凭据或生产状态。所有部署状态默认位于
 `~/.xdsh`，服务只绑定 loopback。运行前请阅读 [安全说明](SECURITY.md) 和
 [容器说明](CONTAINER.md)。
-
-## 交给 AI agent 部署
-
-把下方提示词贴给能访问本项目和目标主机的 agent：
-
-```text
-请在我授权的主机部署此 XDSH 源码版本。先读 README、COMPATIBILITY、
-PROVIDERS、SECURITY（开发仓库位于 docs/public），按环境读 WSL 或 CONTAINER。
-简要规划后直接执行。固定 XDSH／DSH 0.1.1-rc.2，Python 包0.1.1rc2，
-不要安装 DSH latest。检查 Python／Linux Node、现有服务和端口。
-只询问缺少的主机、Provider、精确模型 ID、语言与数字用户白名单。
-隔离安装到 XDSH 专用目录，保留其他服务；仅绑定 loopback。
-凭据使用本地遮罩输入或环境引用，不打印、记录、提交或借用其他产品凭据。
-先启动模型网关，再配置精确 DSH runtime 命令及独立 Telegram Bot。
-执行 doctor、小型 CLI 任务、同会话续话、隔离文件写入读回；
-请我发送 /start 和小任务完成 Telegram 验收。替换服务前保留回滚。
-报告版本、路径、命令、真实测试结果和阻塞。不要把模板生成称为部署完成，
-不要捏造下载地址、暗换模型、关闭安全保护或擅自发布。
-```
-
-agent 仍需要你的授权及安全提供的凭据；这不是管理其他主机的许可。
 
 ## 开发与验证
 

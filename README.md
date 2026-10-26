@@ -98,6 +98,33 @@ when you need managed Telegram/CLI workflows and operational safeguards.
 
 ## Install the pinned pair
 
+### Deploy with an AI agent
+
+Give an agent access to this checkout and paste:
+
+```text
+Deploy this XDSH source release on my authorized host. Read README.md,
+COMPATIBILITY.md, PROVIDERS.md and SECURITY.md (under docs/public in a development
+checkout); use WSL.md or CONTAINER.md for the chosen path. Plan briefly, then act.
+Pin XDSH/DSH to 0.1.1-rc.2 (Python 0.1.1rc2); never use DSH latest.
+Check Python/Node, existing services and ports. Ask only for missing host,
+provider/exact model ID, interface language and numeric Telegram allowlist choices.
+Install in XDSH-owned paths; preserve other runtimes and keep services on loopback.
+Use masked/local secret entry or env references; never print, log or commit keys,
+or import another product's credentials. Start a working model gateway first,
+then configure the exact DSH runtime command and XDSH.
+Run doctor, a tiny CLI task, same-session continuation and an isolated write/read
+test. Ask me to send /start and a tiny Telegram task for channel acceptance.
+Keep a rollback before replacing services. Report versions, paths, commands,
+actual results and blockers. Do not call templates a working deployment, invent
+download URLs, silently substitute models, disable safeguards or publish.
+```
+
+The agent still needs your authorization and securely supplied credentials.
+This is a checklist, not permission to administer unrelated machines.
+
+### Manual installation
+
 Download and extract this release's source archive from GitHub, then open a
 terminal in its project directory. These instructions install that local
 release; they do not require an XDSH package to exist on PyPI.
@@ -512,31 +539,6 @@ For a field installation inside Windows WSL, run
 follow [`WSL.md`](WSL.md). The script installs only the validated DSH
 `0.1.1-rc.2` pair and rejects a floating or different runtime version. It never
 overwrites an existing DSH without an explicit upgrade flag.
-
-## Deploy with an AI agent
-
-Give an agent access to this checkout and paste:
-
-```text
-Deploy this XDSH source release on my authorized host. Read README.md,
-COMPATIBILITY.md, PROVIDERS.md and SECURITY.md (under docs/public in a development
-checkout); use WSL.md or CONTAINER.md for the chosen path. Plan briefly, then act.
-Pin XDSH/DSH to 0.1.1-rc.2 (Python 0.1.1rc2); never use DSH latest.
-Check Python/Node, existing services and ports. Ask only for missing host,
-provider/exact model ID, interface language and numeric Telegram allowlist choices.
-Install in XDSH-owned paths; preserve other runtimes and keep services on loopback.
-Use masked/local secret entry or env references; never print, log or commit keys,
-or import another product's credentials. Start a working model gateway first,
-then configure the exact DSH runtime command and XDSH.
-Run doctor, a tiny CLI task, same-session continuation and an isolated write/read
-test. Ask me to send /start and a tiny Telegram task for channel acceptance.
-Keep a rollback before replacing services. Report versions, paths, commands,
-actual results and blockers. Do not call templates a working deployment, invent
-download URLs, silently substitute models, disable safeguards or publish.
-```
-
-The agent still needs your authorization and securely supplied credentials.
-This is a checklist, not permission to administer unrelated machines.
 
 ## Clearing the session list
 
